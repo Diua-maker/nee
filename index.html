@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Médias NEE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: rgba(255, 255, 255, 0.95);
+            --card-dark: rgba(15, 23, 42, 0.95);
+            --text-light: #1e293b;
+            --text-dark: #f1f5f9;
+            --input-border-light: #cbd5e1;
+            --input-border-dark: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg,
+                #667eea 0%,
+                #764ba2 25%,
+                #f093fb 50%,
+                #4facfe 75%,
+                #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Floating geometric shapes */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .card {
+            background: var(--card-light);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weight-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--input-border-light);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-light);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            animation: slideInUp 0.6s ease-out 0.4s;
+            animation-fill-mode: both;
+        }
+
+        button {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(100, 116, 139, 0.4);
+        }
+
+        .result {
+            margin-top: 32px;
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: pulse 0.6s ease;
+        }
+
+        .result h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-status {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result.excellent {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+            border: 2px solid var(--success-color);
+        }
+
+        .result.excellent h3,
+        .result.excellent .result-value,
+        .result.excellent .result-status {
+            color: #059669;
+        }
+
+        .result.good {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.15));
+            border: 2px solid #3b82f6;
+        }
+
+        .result.good h3,
+        .result.good .result-value,
+        .result.good .result-status {
+            color: #2563eb;
+        }
+
+        .result.average {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.15));
+            border: 2px solid var(--warning-color);
+        }
+
+        .result.average h3,
+        .result.average .result-value,
+        .result.average .result-status {
+            color: #d97706;
+        }
+
+        .result.poor {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
+            border: 2px solid var(--danger-color);
+        }
+
+        .result.poor h3,
+        .result.poor .result-value,
+        .result.poor .result-status {
+            color: #dc2626;
+        }
+
+        /* Dark mode support */
+        body.dark {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        body.dark .card {
+            background: var(--card-dark);
+        }
+
+        body.dark .input-group label {
+            color: #cbd5e1;
+        }
+
+        body.dark .input-group input {
+            background: #1e293b;
+            border-color: var(--input-border-dark);
+            color: var(--text-dark);
+        }
+
+        body.dark .header p {
+            color: #94a3b8;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .result-value {
+                font-size: 3rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Input validation states */
+        .input-group input.error {
+            border-color: var(--danger-color);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Auto dark mode detection */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--bg-dark);
+                color: var(--text-dark);
+            }
+
+            .card {
+                background: var(--card-dark);
+            }
+
+            .input-group label {
+                color: #cbd5e1;
+            }
+
+            .input-group input {
+                background: #1e293b;
+                border-color: var(--input-border-dark);
+                color: var(--text-dark);
+            }
+
+            .header p {
+                color: #94a3b8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>Médias NEE</h1>
+                <p>Calculadora de Média Ponderada</p>
+            </div>
+
+            <form id="gradeForm">
+                <div class="input-group">
+                    <label for="nota1">
+                        Primeira Nota
+                        <span class="weight-badge">Teste 1</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="nota1"
+                        placeholder="Digite a primeira nota"
+                        step="0.1"
+                        min="0"
+                        max="20"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="nota2">
+                        Segunda Nota
+                        <span class="weight-badge">Apresentação</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="nota2"
+                        placeholder="Digite a segunda nota"
+                        step="0.1"
+                        min="0"
+                        max="20"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="nota3">
+                        Terceira Nota
+                        <span class="weight-badge">Trabalho</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="nota3"
+                        placeholder="Digite a terceira nota"
+                        step="0.1"
+                        min="0"
+                        max="20"
+                        required
+                    >
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-calculate">Calcular</button>
+                    <button type="button" class="btn-clear" onclick="clearForm()">Limpar</button>
+                </div>
+            </form>
+
+            <div id="result" class="result">
+                <h3>Média Final</h3>
+                <div class="result-value" id="resultValue">--</div>
+                <div class="result-status" id="resultStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Form handling
+        const form = document.getElementById('gradeForm');
+        const resultDiv = document.getElementById('result');
+        const resultValue = document.getElementById('resultValue');
+        const resultStatus = document.getElementById('resultStatus');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateAverage();
+        });
+
+        // Allow Enter key to calculate
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    calculateAverage();
+                }
+            });
+        });
+
+        function calculateAverage() {
+            const nota1 = parseFloat(document.getElementById('nota1').value);
+            const nota2 = parseFloat(document.getElementById('nota2').value);
+            const nota3 = parseFloat(document.getElementById('nota3').value);
+
+            // Validation
+            const inputs = [
+                { value: nota1, element: document.getElementById('nota1') },
+                { value: nota2, element: document.getElementById('nota2') },
+                { value: nota3, element: document.getElementById('nota3') }
+            ];
+
+            let hasError = false;
+            inputs.forEach(input => {
+                if (isNaN(input.value) || input.value < 0 || input.value > 20) {
+                    input.element.classList.add('error');
+                    hasError = true;
+                    setTimeout(() => input.element.classList.remove('error'), 400);
+                }
+            });
+
+            if (hasError) return;
+
+            // Calculate weighted average
+            const media = (nota1 * 0.3) + (nota2 * 0.3) + (nota3 * 0.4);
+
+            // Display result
+            resultValue.textContent = media.toFixed(2);
+
+            // Remove previous status classes
+            resultDiv.classList.remove('excellent', 'good', 'average', 'poor');
+
+            // Determine status and color
+            let status = '';
+            let statusClass = '';
+
+            if (media >= 16) {
+                status = 'Dispensado! 🎉';
+                statusClass = 'excellent';
+            } else if (media >= 14) {
+                status = 'Quase! 👏';
+                statusClass = 'good';
+            } else if (media >= 10) {
+                status = 'Epah, acontece';
+                statusClass = 'good';
+            } else if (media >= 8) {
+                status = 'Precisa Melhorar';
+                statusClass = 'average';
+            } else {
+                status = 'Reprovado';
+                statusClass = 'poor';
+            }
+
+            resultStatus.textContent = status;
+            resultDiv.classList.add(statusClass);
+
+            // Show result with animation
+            resultDiv.classList.add('show');
+        }
+
+        function clearForm() {
+            form.reset();
+            resultDiv.classList.remove('show');
+            resultDiv.classList.remove('excellent', 'good', 'average', 'poor');
+            resultValue.textContent = '--';
+            resultStatus.textContent = '';
+
+            // Remove error states
+            document.querySelectorAll('input').forEach(input => {
+                input.classList.remove('error');
+            });
+        }
+
+        // Auto-clear error state on input
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+            });
+        });
+    </script>
+</body>
+</html>
+
